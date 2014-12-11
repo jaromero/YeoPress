@@ -2,16 +2,16 @@ class nodejs
 {
 	exec
 	{
-		"add-ppa":
-			command => "apt-get -y install python-software-properties",
+		"install-curl":
+			command => "apt-get -y install curl",
 			timeout => 0
 	}
 
 	exec
 	{
-		"ppa-node":
-			command => "add-apt-repository ppa:chris-lea/node.js",
-			require => Exec["add-ppa"],
+		"setup-node-repository":
+			command => "curl -sL https://deb.nodesource.com/setup | sudo bash -",
+			require => Exec["install-curl"],
 			timeout => 0
 	}
 
@@ -19,7 +19,7 @@ class nodejs
 	{
 		"install-node":
 			command => "apt-get update && apt-get -y install nodejs",
-			require => Exec["ppa-node"],
+			require => Exec["setup-node-repository"],
 			timeout => 0
 	}
 }
